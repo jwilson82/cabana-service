@@ -47,6 +47,9 @@ jobs:
 
       # build jar
       - run: gradle assemble
+
+      # git
+      - run: git log
 workflows:
   build:
     jobs:
