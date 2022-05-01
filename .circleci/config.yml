@@ -46,7 +46,7 @@ jobs:
       - run: gradle test
 
       # build jar
-      - run: gradle assemble
+      - run: gradle bootJar
 
       # git
       - run:
