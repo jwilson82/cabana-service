@@ -27,8 +27,9 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: ll -lah
-      - run: echo "Deploy!"
+      - azure-cli/install
+      - azure-cli/login-with-user
+      - run: az webapp deploy --resource-group cabana --name cabana-service src-path cabana-service.jar --type jar
 workflows:
   build:
     jobs:
@@ -40,3 +41,5 @@ workflows:
       - deploy:
           requires:
             - build
+          context:
+            - azure
