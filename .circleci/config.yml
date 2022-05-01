@@ -48,18 +48,17 @@ jobs:
       # build jar
       - run: gradle bootJar
 
-      # git
-      - run:
-          name: commit jar to git
-          command: |
-            mv build/libs/cabana-service.jar .
-            git config user.email "jeff.r.wilson@gmail.com"
-            git config user.name "Jeff Wilson"
-            git checkout deploy
-            git add cabana-service.jar
-            git commit -m "${CIRCLE_SHA1}"
-            git push origin deploy
-
+      # save jar
+      - save_workspace:
+          root: ./build/libs
+          paths:
+            - *.jar
+  deploy:
+    steps:
+      # restore jar
+      - attach_workspace:
+          at: .
+      - run: echo "Deploy!"
 workflows:
   build:
     jobs:
@@ -68,3 +67,6 @@ workflows:
             branches:
               only:
                 - main
+      - deploy:
+          requires:
+            - build

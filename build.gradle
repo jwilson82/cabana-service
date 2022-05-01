@@ -14,8 +14,9 @@ configurations {
 	}
 }
 
-jar{
-	archiveName 'cabana-service.jar'
+bootJar {
+	archiveBaseName = "cabana-service"
+	version = null
 }
 
 repositories {
