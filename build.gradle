@@ -14,6 +14,10 @@ configurations {
 	}
 }
 
+jar{
+	archiveName 'cabana-service.jar'
+}
+
 repositories {
 	mavenCentral()
 }
