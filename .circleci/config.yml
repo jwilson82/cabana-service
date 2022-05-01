@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  azure-cli: circleci/azure-cli@1.0.0
 jobs:
   build:
     docker:
@@ -16,7 +18,7 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
       - run: gradle test
       - run: gradle bootJar
-      - save_workspace:
+      - persist_to_workspace:
           root: ./build/libs
           paths:
             - "*.jar"
@@ -25,6 +27,7 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run: ll -lah
       - run: echo "Deploy!"
 workflows:
   build:
