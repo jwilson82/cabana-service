@@ -28,7 +28,7 @@ jobs:
       - attach_workspace:
           at: .
       - azure-cli/install
-      - azure-cli/login-with-user
+      - azure-cli/login-with-service-principal
       - run: az webapp deploy --resource-group cabana --name cabana-service src-path cabana-service.jar --type jar
 workflows:
   build:
