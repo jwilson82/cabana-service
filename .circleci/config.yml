@@ -49,7 +49,15 @@ jobs:
       - run: gradle assemble
 
       # git
-      - run: git log
+      - run:
+          name: commit jar to git
+          command: |
+            git checkout deploy
+            mv build/libs/cabana-service.jar .
+            git add cabana-service.jar
+            git commit -m "${CIRCLE_SHA1}"
+            git push origin deploy
+
 workflows:
   build:
     jobs:
