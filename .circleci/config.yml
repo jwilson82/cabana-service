@@ -1,23 +1,22 @@
 version: 2.1
 orbs:
   azure-cli: circleci/azure-cli@1.0.0
+  gradle: circleci/gradle@2.2.0
 jobs:
-  build:
-    docker:
-      - image: cimg/openjdk:17.0
+  test:
+    executor: gradle/default
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            - v1-dependencies-
-      - run: gradle dependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
-      - run: gradle test
-      - run: gradle bootJar
+      - gradle/with_cache:
+          steps:
+            - run: ./gradlew test
+  build:
+    executor: gradle/default
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run: ./gradlew bootJar
       - persist_to_workspace:
           root: ./build/libs
           paths:
@@ -31,13 +30,16 @@ jobs:
       - azure-cli/login-with-service-principal
       - run: az webapp deploy --resource-group cabana --name cabana-service --type jar --src-path cabana-service.jar --restart true
 workflows:
-  build:
+  test-build-deploy:
     jobs:
-      - build:
+      - test:
           filters:
             branches:
               only:
                 - main
+      - build:
+          requires:
+            - test
       - deploy:
           requires:
             - build
