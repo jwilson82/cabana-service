@@ -4,14 +4,18 @@ orbs:
   gradle: circleci/gradle@2.2.0
 jobs:
   test:
-    executor: gradle/default
+    executor:
+      name: gradle/default
+      tag: '17.0'
     steps:
       - checkout
       - gradle/with_cache:
           steps:
             - run: ./gradlew test
   build:
-    executor: gradle/default
+    executor:
+      name: gradle/default
+      tag: '17.0'
     steps:
       - checkout
       - gradle/with_cache:
