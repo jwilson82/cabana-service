@@ -10,3 +10,6 @@ replay_pid*
 ## JETBRAINS ##
 .idea
 build
+
+## VS CODE ##
+bin
